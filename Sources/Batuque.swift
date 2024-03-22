@@ -27,14 +27,27 @@ struct Batuque: ParsableCommand {
     static var configuration = CommandConfiguration(
         abstract: "Generator of lists of batuque and quotes.",
         discussion: """
-        This tool is designed to generate lists of batuqueiros for Maracatus
-        batuque performances, taking into account the proportion of instruments and
-        instrumental lists based on a database of batuqueiros, also generating
-        inspiring quotes for each list according to the chosen theme. By entering the
-        quantity of batuqueiros, it generates a proportional list for the batuque
-        and adds different quotes within the available list according to the chosen
-        theme. It's possible to create, delete and read the list of registered
-        instrumentalists. You can also consult the available themes.
+
+        888888b.            888
+        888  "88b           888
+        888  .88P           888
+        8888888K.   8888b.  888888 888  888  .d88888 888  888  .d88b.
+        888  "Y88b     "88b 888    888  888 d88" 888 888  888 d8P  Y8b
+        888    888 .d888888 888    888  888 888  888 888  888 88888888
+        888   d88P 888  888 Y88b.  Y88b 888 Y88b 888 Y88b 888 Y8b.
+        8888888P"  "Y888888  "Y888  "Y88888  "Y88888  "Y88888  "Y8888
+                                                 888
+                                                 888
+                                                 888
+        
+        This tool is designed to generate lists of batuqueiros for Maracatu's
+        performances, taking into account the proportion and priority of
+        instruments based on a database of batuqueiros, also generating inspiring
+        quotes according to the chosen theme.
+        By entering the quantity of batuqueiros, it generates a list and adds
+        different quotes within the availability of themes.
+        It's possible to create, read, update and delete the registered
+        batuqueiros. You can also consult the available themes.
         """,
         subcommands: [Recruit.self, Create.self, Read.self, Update.self, Delete.self, Quote.self, Themes.self]
     )
@@ -125,7 +138,7 @@ struct Recruit: ParsableCommand {
         let qntAgogo: Int = instruments[6].quantidade
         let qntXequere: Int = instruments[7].quantidade
 
-        print("Proporção de instrumentos: \(qntAlfaias) alfaia(s), \(qntGongue) gonguê(s), \(qntAgbe) agbê(s), \(qntCaixa) caixa(s), \(qntFerro) ferro(s), \(qntBumbo) bumbo(s), \(qntAgogo) agogô(s), \(qntXequere) xequerê(s)\n")
+        print("\n---> Proporção de instrumentos: \(qntAlfaias) alfaia(s), \(qntGongue) gonguê(s), \(qntAgbe) agbê(s), \(qntCaixa) caixa(s), \(qntFerro) ferro(s), \(qntBumbo) bumbo(s), \(qntAgogo) agogô(s), \(qntXequere) xequerê(s)\n")
 
         var batuqueirosSorteados: [Batuqueiro] = []
         func sorteiaBat(qntBat: Int, bats: inout [Batuqueiro]) {
@@ -149,13 +162,13 @@ struct Recruit: ParsableCommand {
         //------ Frase inspiração --------
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let citacaoMaracatuSorteada = maracatu.randomElement()!
-        print("Frase inspiração: \(citacaoMaracatuSorteada)\n")
+        print("\n---> Frase inspiração: \(citacaoMaracatuSorteada)\n")
         sleep(1)
-        print("Gerando lista...\n")
+        print("---> Gerando lista...")
         sleep(1)
 
         //----- Print lista ------
-        print("----> Lista de batuqueiros <----\n")
+        print("\n----> Lista de batuqueiros <----\n")
         for batuqueiro in batuqueirosSorteados {
             print("\(batuqueiro.nome) | \(batuqueiro.instrumento)")
         }
@@ -165,13 +178,13 @@ struct Recruit: ParsableCommand {
 // ----- Início função create --------
 struct Create: ParsableCommand {
     //  ------ Cria os parâmentros do Create -------
-    @Argument(help: "Batuqueiro's name")
+    @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\":")
     var nome: String
 
-    @Argument(help: "Batuqueiro's instrument")
+    @Argument(help: "Batuqueiro's instrument. Options: regente, alfaia, gonguê, agbê, caixa, ferro, bumbo, agogô, xequerê")
     var instrumento: String
 
-    @Argument(help: "Batuqueiro's priority")
+    @Argument(help: "Batuqueiro's priority, entering just the number. Ex.: 1. Description: regente: 0, alfaia: 1, gonguê: 2, agbê: 3, caixa: 4, ferro: 5, bumbo: 6, agogô: 7, xequerê: 8")
     var prioridade: Int
 
     func run() throws {
@@ -185,7 +198,7 @@ struct Create: ParsableCommand {
 
         //      ----- Salva o novo registro no JSON ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("Registro de \(nome) criado com sucesso.\n")
+        print("\n---> Registro de \(nome) criado com sucesso.\n")
     }
 }
 
@@ -198,7 +211,7 @@ struct Read: ParsableCommand {
 
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
-            print("\(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
+            print("\n---> \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)/n")
         }
     }
 }
@@ -230,7 +243,7 @@ struct Update: ParsableCommand {
         model.batuqueiros.insert(batuqueiro, at: posicao)
 
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("Os dados do batuqueiro foram atualizados na posição \(posicao)")
+        print("\n---> Os dados do batuqueiro foram atualizados na posição \(posicao)\n")
     }
 }
 
@@ -248,13 +261,13 @@ struct Delete: ParsableCommand {
 
         //------ Salva a alteração na lista ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("---> Registro do batuqueiro na posição \(posicao) foi removido\n")
-        print("Gerando lista de batuqueiros atualizada...")
+        print("\n---> Registro do batuqueiro na posição \(posicao) foi removido\n")
+        print("\n---> Gerando lista de batuqueiros atualizada...\n")
         sleep(2)
 
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
-            print("\(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
+            print("\n---> \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)\n")
         }
     }
 }
@@ -308,13 +321,13 @@ struct Generate: ParsableCommand {
         switch subject {
         case .cultura:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre cultura...\n")
-            print(citacaoCulturaSorteada)
+            print("\n ---> Frase inspiração: \(citacaoCulturaSorteada)\n")
         case .maracatu:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre maracatu...\n")
-            print(citacaoMaracatuSorteada)
+            print("\n ---> Frase inspiração: \(citacaoMaracatuSorteada)\n")
         case .musica:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre música...\n")
-            print(citacaoMusicaSorteada)
+            print("\n ---> Frase inspiração: \(citacaoMusicaSorteada)\n")
         }
     }
 }
@@ -325,9 +338,9 @@ struct Themes: ParsableCommand {
 
     mutating func run() throws {
         Persistence.projectName = "Batuque"
-        print("-----> Lista de temas <-----\n")
+        print("\n-----> Lista de temas <-----\n")
         for theme in themes {
-            print(theme)
+            print("\(theme)\n")
         }
     }
 }

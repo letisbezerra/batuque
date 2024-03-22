@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "batuque"
-               BuildableName = "batuque"
-               BlueprintName = "batuque"
+               BlueprintIdentifier = "Batuque"
+               BuildableName = "Batuque"
+               BlueprintName = "Batuque"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -43,9 +43,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "batuque"
-            BuildableName = "batuque"
-            BlueprintName = "batuque"
+            BlueprintIdentifier = "Batuque"
+            BuildableName = "Batuque"
+            BlueprintName = "Batuque"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -60,9 +60,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "batuque"
-            BuildableName = "batuque"
-            BlueprintName = "batuque"
+            BlueprintIdentifier = "Batuque"
+            BuildableName = "Batuque"
+            BlueprintName = "Batuque"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
