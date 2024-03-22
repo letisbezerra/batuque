@@ -204,14 +204,19 @@ struct Create: ParsableCommand {
 
 // ------- Início função Read -----
 struct Read: ParsableCommand {
+    static var configuration = CommandConfiguration(
+        discussion: "\nShows the full list of batuqueiros" )
 
     func run() throws {
+
         Persistence.projectName = "Batuque"
         let model: Model = try Persistence.readJson(file: "Batuqueiros.json")
 
+        print("\n---> Lista completa de batuqueiros <---\n")
+        sleep(2)
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
-            print("\n---> \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)/n")
+            print("\(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
         }
     }
 }
@@ -267,7 +272,7 @@ struct Delete: ParsableCommand {
 
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
-            print("\n---> \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)\n")
+            print("\n---> ❌ \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
         }
     }
 }
@@ -321,26 +326,29 @@ struct Generate: ParsableCommand {
         switch subject {
         case .cultura:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre cultura...\n")
-            print("\n ---> Frase inspiração: \(citacaoCulturaSorteada)\n")
+            print("\n ---> 💭 Frase inspiração: \(citacaoCulturaSorteada)\n")
         case .maracatu:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre maracatu...\n")
-            print("\n ---> Frase inspiração: \(citacaoMaracatuSorteada)\n")
+            print("\n ---> 💭 Frase inspiração: \(citacaoMaracatuSorteada)\n")
         case .musica:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre música...\n")
-            print("\n ---> Frase inspiração: \(citacaoMusicaSorteada)\n")
+            print("\n ---> 💭 Frase inspiração: \(citacaoMusicaSorteada)\n")
         }
     }
 }
 
 //-------- Início consulta de Themes ------
 struct Themes: ParsableCommand {
+    static var configuration = CommandConfiguration(
+        discussion: "\nShows the full list of subjects" )
+
     var themes = ["Maracatu", "Cultura", "Música"]
 
     mutating func run() throws {
         Persistence.projectName = "Batuque"
         print("\n-----> Lista de temas <-----\n")
         for theme in themes {
-            print("\(theme)\n")
+            print("★ \(theme)\n")
         }
     }
 }
