@@ -226,13 +226,13 @@ struct Update: ParsableCommand {
     @Argument(help: "Batuqueiro's position in the list")
     var posicao: Int
 
-    @Argument(help: "Batuqueiro's name")
+    @Argument(help: "Batuqueiro's new name")
     var nome: String
 
-    @Argument(help: "Batuqueiro's instrument")
+    @Argument(help: "Batuqueiro's new instrument")
     var instrumento: String
 
-    @Argument(help: "Batuqueiro's priority")
+    @Argument(help: "Batuqueiro's new priority")
     var prioridade: Int
 
     func run() throws {
@@ -304,18 +304,14 @@ struct Generate: ParsableCommand {
 
     mutating func run() throws {
         Persistence.projectName = "Batuque"
-
+        
+        let content = Content()
+        content.saveQuotes()
+        
         //-------- Setup das listas de citações -------
         let cultura: [String] = (try? Persistence.readPlainText(path: "cultura.txt")) ?? []
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let musica: [String] = (try? Persistence.readPlainText(path: "musica.txt")) ?? []
-
-        //      //-------- Cria um arquivo .txt, .json, etc, com o conteúdo definido -------
-        //        do {
-        //            try Persistence.savePlainText(content: musica, path: "musica.txt")
-        //        } catch {
-        //            print(error)
-        //        }
 
         //------- Sorteio das citações -------
         let citacaoCulturaSorteada = cultura.randomElement()!
@@ -340,7 +336,7 @@ struct Generate: ParsableCommand {
 //-------- Início consulta de Themes ------
 struct Themes: ParsableCommand {
     static var configuration = CommandConfiguration(
-        discussion: "\nShows the full list of subjects" )
+        discussion: "\nShows the full list of subjects")
 
     var themes = ["Maracatu", "Cultura", "Música"]
 
