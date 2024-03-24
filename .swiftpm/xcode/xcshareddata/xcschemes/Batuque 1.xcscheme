@@ -59,7 +59,11 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "quote generate --subject maracatu"
+            argument = "quote generate --subject  cultura"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "recruit -l 32"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

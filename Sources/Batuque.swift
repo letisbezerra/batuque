@@ -67,6 +67,15 @@ struct Recruit: ParsableCommand {
             listaBat.append(batuqueiro)
         }
     }
+    
+    var batuqueirosSorteados: [Batuqueiro] = []
+    mutating func sorteiaBat(qntBat: Int, bats: inout [Batuqueiro]) {
+        for _ in 1...qntBat {
+            guard let index = bats.indices.randomElement() else { break }
+            let batuqueiroSorteado = bats.remove(at: index)
+            batuqueirosSorteados.append(batuqueiroSorteado)
+        }
+    }
 
     mutating func run() throws {
         guard (10...50).contains(lenght) else {
@@ -140,15 +149,6 @@ struct Recruit: ParsableCommand {
 
         print("\n---> Proporção de instrumentos: \(qntAlfaias) alfaia(s), \(qntGongue) gonguê(s), \(qntAgbe) agbê(s), \(qntCaixa) caixa(s), \(qntFerro) ferro(s), \(qntBumbo) bumbo(s), \(qntAgogo) agogô(s), \(qntXequere) xequerê(s)\n")
 
-        var batuqueirosSorteados: [Batuqueiro] = []
-        func sorteiaBat(qntBat: Int, bats: inout [Batuqueiro]) {
-            for _ in 1...qntBat {
-                guard let index = bats.indices.randomElement() else { break }
-                let batuqueiroSorteado = bats.remove(at: index)
-                batuqueirosSorteados.append(batuqueiroSorteado)
-            }
-        }
-
         batuqueirosSorteados.append(regenteSorteado)
         sorteiaBat(qntBat: qntAlfaias, bats: &alfaias)
         sorteiaBat(qntBat: qntGongue, bats: &gongues)
@@ -160,6 +160,9 @@ struct Recruit: ParsableCommand {
         sorteiaBat(qntBat: qntXequere, bats: &xequeres)
 
         //------ Frase inspiração --------
+        let content = Content()
+        content.saveQuotes()
+        
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let citacaoMaracatuSorteada = maracatu.randomElement()!
         print("\n---> Frase inspiração: \(citacaoMaracatuSorteada)\n")
@@ -204,11 +207,9 @@ struct Create: ParsableCommand {
 
 // ------- Início função Read -----
 struct Read: ParsableCommand {
-    static var configuration = CommandConfiguration(
-        discussion: "\nShows the full list of batuqueiros" )
+    static var configuration = CommandConfiguration(discussion: "\nShows the full list of batuqueiros")
 
     func run() throws {
-
         Persistence.projectName = "Batuque"
         let model: Model = try Persistence.readJson(file: "Batuqueiros.json")
 
@@ -307,8 +308,8 @@ struct Generate: ParsableCommand {
         
         let content = Content()
         content.saveQuotes()
-        
-        //-------- Setup das listas de citações -------
+
+        //------- Setup das listas de citações -------
         let cultura: [String] = (try? Persistence.readPlainText(path: "cultura.txt")) ?? []
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let musica: [String] = (try? Persistence.readPlainText(path: "musica.txt")) ?? []
@@ -335,8 +336,7 @@ struct Generate: ParsableCommand {
 
 //-------- Início consulta de Themes ------
 struct Themes: ParsableCommand {
-    static var configuration = CommandConfiguration(
-        discussion: "\nShows the full list of subjects")
+    static var configuration = CommandConfiguration(discussion: "\nShows the full list of subjects")
 
     var themes = ["Maracatu", "Cultura", "Música"]
 
