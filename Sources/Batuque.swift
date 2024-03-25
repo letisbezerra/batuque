@@ -181,16 +181,39 @@ struct Recruit: ParsableCommand {
 // ----- Início função create --------
 struct Create: ParsableCommand {
     //  ------ Cria os parâmentros do Create -------
-    @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\":")
+    @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\"")
     var nome: String
 
     @Argument(help: "Batuqueiro's instrument. Options: regente, alfaia, gonguê, agbê, caixa, ferro, bumbo, agogô, xequerê")
     var instrumento: String
 
-    @Argument(help: "Batuqueiro's priority, entering just the number. Ex.: 1. Description: regente: 0, alfaia: 1, gonguê: 2, agbê: 3, caixa: 4, ferro: 5, bumbo: 6, agogô: 7, xequerê: 8")
-    var prioridade: Int
-
     func run() throws {
+        var prioridade: Int = 0
+        switch instrumento {
+        case "regente":
+            prioridade = 0
+        case "alfaia":
+            prioridade = 1
+        case "gonguê":
+            prioridade = 2
+        case "agbê":
+            prioridade = 3
+        case "caixa":
+            prioridade = 4
+        case "ferro":
+            prioridade = 5
+        case "bumbo":
+            prioridade = 6
+        case "agogô":
+            prioridade = 7
+        case "xequerê":
+            prioridade = 8
+            
+        default:
+            print("---> Please insert a valid instrument <---")
+            throw CleanExit.helpRequest(self)
+        }
+        
         //      ----- Cria novo batuqueiro -----
         let batuqueiro = Batuqueiro(nome: nome, instrumento: instrumento, prioridade: prioridade)
         Persistence.projectName = "Batuque"
@@ -267,13 +290,13 @@ struct Delete: ParsableCommand {
 
         //------ Salva a alteração na lista ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("\n---> Registro do batuqueiro na posição \(posicao) foi removido\n")
+        print("\n---> ❌ Registro do batuqueiro na posição \(posicao) foi removido\n")
         print("\n---> Gerando lista de batuqueiros atualizada...\n")
         sleep(2)
 
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
-            print("\n---> ❌ \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
+            print("\n---> \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
         }
     }
 }
