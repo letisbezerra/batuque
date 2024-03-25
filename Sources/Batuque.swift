@@ -178,9 +178,10 @@ struct Recruit: ParsableCommand {
         }
     }
 }
-
 // ----- Início função create --------
 struct Create: ParsableCommand {
+    @OptionGroup var options: Batuque.Options
+    
     //  ------ Cria os parâmentros do Create -------
     @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\"")
     var nome: String
@@ -222,6 +223,8 @@ struct Create: ParsableCommand {
         //      ----- Lendo a lista de batuqueiros -----
         var model: Model = try Persistence.readJson(file: "batuqueiros.json")
         model.batuqueiros.append(batuqueiro)
+        verbosePrint(verbose: options.verbose, "\n---> Adicionando novo batuqueiro...")
+        sleep(1)
 
         //      ----- Salva o novo registro no JSON ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
@@ -381,13 +384,10 @@ struct Generate: ParsableCommand {
         }
     }
 }
-
 //-------- Início consulta de Themes ------
 struct Themes: ParsableCommand {
     static var configuration = CommandConfiguration(discussion: "\nShows the full list of subjects")
-
     var themes = ["Maracatu", "Cultura", "Música"]
-
     mutating func run() throws {
         Persistence.projectName = "Batuque"
         print("\n-----> Lista de temas <-----\n")

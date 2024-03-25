@@ -59,7 +59,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "create &quot;George Menezes&quot; &quot;alfaia&quot;"
+            argument = "create &quot;George Menezes&quot; &quot;alfaia&quot; -v"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -72,11 +72,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "recruit -l 32"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "read"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "update 65 &quot;Frederico Martins&quot; &quot;ferroo&quot;"
