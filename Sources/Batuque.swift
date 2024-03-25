@@ -61,6 +61,7 @@ struct Batuque: ParsableCommand {
 struct Recruit: ParsableCommand {
     @Option(name: .shortAndLong, help: "Defines the number of batuqueiros between 10 and 50 and create a propotional list cosidering the instruments priority.")
     var lenght: Int
+    @OptionGroup var options: Batuque.Options
 
     func addBat(batuqueiros: [Batuqueiro], instrumento: String, listaBat: inout [Batuqueiro]) {
         for batuqueiro in batuqueiros where batuqueiro.instrumento == instrumento {
@@ -167,7 +168,7 @@ struct Recruit: ParsableCommand {
         let citacaoMaracatuSorteada = maracatu.randomElement()!
         print("\n---> Frase inspiração: \(citacaoMaracatuSorteada)\n")
         sleep(1)
-        print("---> Gerando lista...")
+        verbosePrint(verbose: options.verbose, "---> Gerando lista...")
         sleep(1)
 
         //----- Print lista ------
@@ -302,6 +303,8 @@ struct Update: ParsableCommand {
 struct Delete: ParsableCommand {
     @Argument(help: "Batuqueiro's position in the list")
     var posicao: Int
+    
+    @OptionGroup var options: Batuque.Options
 
     func run() throws {
         Persistence.projectName = "Batuque"
@@ -313,7 +316,7 @@ struct Delete: ParsableCommand {
         //------ Salva a alteração na lista ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
         print("\n---> ❌ Registro do batuqueiro na posição \(posicao) foi removido\n")
-        print("\n---> Gerando lista de batuqueiros atualizada...\n")
+        verbosePrint(verbose: options.verbose, "\n---> Gerando lista de batuqueiros atualizada...\n")
         sleep(2)
 
         for(index, bat) in model.batuqueiros.enumerated() {
