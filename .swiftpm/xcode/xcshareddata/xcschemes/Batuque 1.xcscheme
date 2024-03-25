@@ -55,11 +55,11 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "delete help"
+            argument = "delete --help"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "create &quot;George Menezes&quot; &quot;alfaiaaaa&quot;"
+            argument = "create &quot;George Menezes&quot; &quot;alfaia&quot;"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -77,6 +77,14 @@
          <CommandLineArgument
             argument = "read"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "update 65 &quot;Frederico Martins&quot; &quot;ferroo&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "update --help"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "delete 66"

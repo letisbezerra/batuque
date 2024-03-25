@@ -256,11 +256,33 @@ struct Update: ParsableCommand {
     @Argument(help: "Batuqueiro's new instrument")
     var instrumento: String
 
-    @Argument(help: "Batuqueiro's new priority")
-    var prioridade: Int
-
     func run() throws {
         Persistence.projectName = "Batuque"
+        var prioridade: Int = 0
+        switch instrumento {
+        case "regente":
+            prioridade = 0
+        case "alfaia":
+            prioridade = 1
+        case "gonguê":
+            prioridade = 2
+        case "agbê":
+            prioridade = 3
+        case "caixa":
+            prioridade = 4
+        case "ferro":
+            prioridade = 5
+        case "bumbo":
+            prioridade = 6
+        case "agogô":
+            prioridade = 7
+        case "xequerê":
+            prioridade = 8
+            
+        default:
+            print("---> Please insert a valid instrument <---")
+            throw CleanExit.helpRequest(self)
+        }
 
         //----- Cria (update) novo batuqueiro -----
         let batuqueiro = Batuqueiro(nome: nome, instrumento: instrumento, prioridade: prioridade)
