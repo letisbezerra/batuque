@@ -4,6 +4,11 @@ This tool is designed to generate lists of batuqueiros for Maracatu's performanc
 ###### Authors: Leticia Bezerra and Paulo Henrique
 
 ## Usage
+### Batuque 
+- Shows the command's help and the list of subcommands and options
+```bash
+batuque help
+```
 ### Recruit
 - Defines the number of batuqueiros between 10 and 50 and create a propotional list cosidering the instruments priority
 ```bash
