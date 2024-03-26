@@ -60,7 +60,7 @@ struct Batuque: ParsableCommand {
 //------ Início CRUD -------
 struct Recruit: ParsableCommand {
     @Option(name: .shortAndLong, help: "Defines the number of batuqueiros between 10 and 50 and create a propotional list cosidering the instruments priority.")
-    var lenght: Int
+    var length: Int
     @OptionGroup var options: Batuque.Options
 
     func addBat(batuqueiros: [Batuqueiro], instrumento: String, listaBat: inout [Batuqueiro]) {
@@ -79,7 +79,7 @@ struct Recruit: ParsableCommand {
     }
 
     mutating func run() throws {
-        guard (10...50).contains(lenght) else {
+        guard (10...50).contains(length) else {
             print("---> Please insert a number between 10 and 50 <---")
             throw CleanExit.helpRequest(self)
         }
@@ -112,7 +112,7 @@ struct Recruit: ParsableCommand {
         addBat(batuqueiros: model.batuqueiros, instrumento: "agogô", listaBat: &agogos)
         addBat(batuqueiros: model.batuqueiros, instrumento: "xequerê", listaBat: &xequeres)
 
-        var count: Int = lenght
+        var count: Int = length
         var instruments: [(nome: String, quantidade: Int)] = [
             ("Alfaias", 0),
             ("Gongue", 0),
