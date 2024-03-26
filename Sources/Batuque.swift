@@ -65,7 +65,7 @@ struct Batuque: ParsableCommand {
 
 //------ Início CRUD -------
 struct Recruit: ParsableCommand {
-    @Option(name: .shortAndLong, help: "Defines the number of batuqueiros between 10 and 50 and create a propotional list cosidering the instruments priority.")
+    @Option(name: .shortAndLong, help: "Defines the number of batuqueiros between 10 and 50 and create a propotional list considering the instruments priority.")
     var length: Int
     @OptionGroup var options: Batuque.Options
 
