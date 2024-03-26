@@ -60,16 +60,26 @@ struct Batuque: ParsableCommand {
 //------ Início CRUD -------
 struct Recruit: ParsableCommand {
     @Option(name: .shortAndLong, help: "Defines the number of batuqueiros between 10 and 50 and create a propotional list cosidering the instruments priority.")
-    var lenght: Int
+    var length: Int
+    @OptionGroup var options: Batuque.Options
 
     func addBat(batuqueiros: [Batuqueiro], instrumento: String, listaBat: inout [Batuqueiro]) {
         for batuqueiro in batuqueiros where batuqueiro.instrumento == instrumento {
             listaBat.append(batuqueiro)
         }
     }
+    
+    var batuqueirosSorteados: [Batuqueiro] = []
+    mutating func sorteiaBat(qntBat: Int, bats: inout [Batuqueiro]) {
+        for _ in 1...qntBat {
+            guard let index = bats.indices.randomElement() else { break }
+            let batuqueiroSorteado = bats.remove(at: index)
+            batuqueirosSorteados.append(batuqueiroSorteado)
+        }
+    }
 
     mutating func run() throws {
-        guard (10...50).contains(lenght) else {
+        guard (10...50).contains(length) else {
             print("---> Please insert a number between 10 and 50 <---")
             throw CleanExit.helpRequest(self)
         }
@@ -102,7 +112,7 @@ struct Recruit: ParsableCommand {
         addBat(batuqueiros: model.batuqueiros, instrumento: "agogô", listaBat: &agogos)
         addBat(batuqueiros: model.batuqueiros, instrumento: "xequerê", listaBat: &xequeres)
 
-        var count: Int = lenght
+        var count: Int = length
         var instruments: [(nome: String, quantidade: Int)] = [
             ("Alfaias", 0),
             ("Gongue", 0),
@@ -140,15 +150,6 @@ struct Recruit: ParsableCommand {
 
         print("\n---> Proporção de instrumentos: \(qntAlfaias) alfaia(s), \(qntGongue) gonguê(s), \(qntAgbe) agbê(s), \(qntCaixa) caixa(s), \(qntFerro) ferro(s), \(qntBumbo) bumbo(s), \(qntAgogo) agogô(s), \(qntXequere) xequerê(s)\n")
 
-        var batuqueirosSorteados: [Batuqueiro] = []
-        func sorteiaBat(qntBat: Int, bats: inout [Batuqueiro]) {
-            for _ in 1...qntBat {
-                guard let index = bats.indices.randomElement() else { break }
-                let batuqueiroSorteado = bats.remove(at: index)
-                batuqueirosSorteados.append(batuqueiroSorteado)
-            }
-        }
-
         batuqueirosSorteados.append(regenteSorteado)
         sorteiaBat(qntBat: qntAlfaias, bats: &alfaias)
         sorteiaBat(qntBat: qntGongue, bats: &gongues)
@@ -160,11 +161,14 @@ struct Recruit: ParsableCommand {
         sorteiaBat(qntBat: qntXequere, bats: &xequeres)
 
         //------ Frase inspiração --------
+        let content = Content()
+        content.saveQuotes()
+        
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let citacaoMaracatuSorteada = maracatu.randomElement()!
         print("\n---> Frase inspiração: \(citacaoMaracatuSorteada)\n")
         sleep(1)
-        print("---> Gerando lista...")
+        verbosePrint(verbose: options.verbose, "---> Gerando lista...")
         sleep(1)
 
         //----- Print lista ------
@@ -174,20 +178,44 @@ struct Recruit: ParsableCommand {
         }
     }
 }
-
 // ----- Início função create --------
 struct Create: ParsableCommand {
+    @OptionGroup var options: Batuque.Options
+    
     //  ------ Cria os parâmentros do Create -------
-    @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\":")
+    @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\"")
     var nome: String
 
     @Argument(help: "Batuqueiro's instrument. Options: regente, alfaia, gonguê, agbê, caixa, ferro, bumbo, agogô, xequerê")
     var instrumento: String
 
-    @Argument(help: "Batuqueiro's priority, entering just the number. Ex.: 1. Description: regente: 0, alfaia: 1, gonguê: 2, agbê: 3, caixa: 4, ferro: 5, bumbo: 6, agogô: 7, xequerê: 8")
-    var prioridade: Int
-
     func run() throws {
+        var prioridade: Int = 0
+        switch instrumento {
+        case "regente":
+            prioridade = 0
+        case "alfaia":
+            prioridade = 1
+        case "gonguê":
+            prioridade = 2
+        case "agbê":
+            prioridade = 3
+        case "caixa":
+            prioridade = 4
+        case "ferro":
+            prioridade = 5
+        case "bumbo":
+            prioridade = 6
+        case "agogô":
+            prioridade = 7
+        case "xequerê":
+            prioridade = 8
+            
+        default:
+            print("---> Please insert a valid instrument <---")
+            throw CleanExit.helpRequest(self)
+        }
+        
         //      ----- Cria novo batuqueiro -----
         let batuqueiro = Batuqueiro(nome: nome, instrumento: instrumento, prioridade: prioridade)
         Persistence.projectName = "Batuque"
@@ -195,6 +223,8 @@ struct Create: ParsableCommand {
         //      ----- Lendo a lista de batuqueiros -----
         var model: Model = try Persistence.readJson(file: "batuqueiros.json")
         model.batuqueiros.append(batuqueiro)
+        verbosePrint(verbose: options.verbose, "\n---> Adicionando novo batuqueiro...")
+        sleep(1)
 
         //      ----- Salva o novo registro no JSON ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
@@ -204,11 +234,9 @@ struct Create: ParsableCommand {
 
 // ------- Início função Read -----
 struct Read: ParsableCommand {
-    static var configuration = CommandConfiguration(
-        discussion: "\nShows the full list of batuqueiros" )
+    static var configuration = CommandConfiguration(discussion: "\nShows the full list of batuqueiros")
 
     func run() throws {
-
         Persistence.projectName = "Batuque"
         let model: Model = try Persistence.readJson(file: "Batuqueiros.json")
 
@@ -226,17 +254,39 @@ struct Update: ParsableCommand {
     @Argument(help: "Batuqueiro's position in the list")
     var posicao: Int
 
-    @Argument(help: "Batuqueiro's name")
+    @Argument(help: "Batuqueiro's new name")
     var nome: String
 
-    @Argument(help: "Batuqueiro's instrument")
+    @Argument(help: "Batuqueiro's new instrument")
     var instrumento: String
-
-    @Argument(help: "Batuqueiro's priority")
-    var prioridade: Int
 
     func run() throws {
         Persistence.projectName = "Batuque"
+        var prioridade: Int = 0
+        switch instrumento {
+        case "regente":
+            prioridade = 0
+        case "alfaia":
+            prioridade = 1
+        case "gonguê":
+            prioridade = 2
+        case "agbê":
+            prioridade = 3
+        case "caixa":
+            prioridade = 4
+        case "ferro":
+            prioridade = 5
+        case "bumbo":
+            prioridade = 6
+        case "agogô":
+            prioridade = 7
+        case "xequerê":
+            prioridade = 8
+            
+        default:
+            print("---> Please insert a valid instrument <---")
+            throw CleanExit.helpRequest(self)
+        }
 
         //----- Cria (update) novo batuqueiro -----
         let batuqueiro = Batuqueiro(nome: nome, instrumento: instrumento, prioridade: prioridade)
@@ -256,6 +306,8 @@ struct Update: ParsableCommand {
 struct Delete: ParsableCommand {
     @Argument(help: "Batuqueiro's position in the list")
     var posicao: Int
+    
+    @OptionGroup var options: Batuque.Options
 
     func run() throws {
         Persistence.projectName = "Batuque"
@@ -266,13 +318,13 @@ struct Delete: ParsableCommand {
 
         //------ Salva a alteração na lista ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("\n---> Registro do batuqueiro na posição \(posicao) foi removido\n")
-        print("\n---> Gerando lista de batuqueiros atualizada...\n")
+        print("\n---> ❌ Registro do batuqueiro na posição \(posicao) foi removido\n")
+        verbosePrint(verbose: options.verbose, "\n---> Gerando lista de batuqueiros atualizada...\n")
         sleep(2)
 
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
-            print("\n---> ❌ \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
+            print("\n---> \(displayIndex-1) Batuqueiro: \(bat.nome) | Instrumento: \(bat.instrumento) | Prioridade: \(bat.prioridade)")
         }
     }
 }
@@ -304,18 +356,14 @@ struct Generate: ParsableCommand {
 
     mutating func run() throws {
         Persistence.projectName = "Batuque"
+        
+        let content = Content()
+        content.saveQuotes()
 
-        //-------- Setup das listas de citações -------
+        //------- Setup das listas de citações -------
         let cultura: [String] = (try? Persistence.readPlainText(path: "cultura.txt")) ?? []
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let musica: [String] = (try? Persistence.readPlainText(path: "musica.txt")) ?? []
-
-        //      //-------- Cria um arquivo .txt, .json, etc, com o conteúdo definido -------
-        //        do {
-        //            try Persistence.savePlainText(content: musica, path: "musica.txt")
-        //        } catch {
-        //            print(error)
-        //        }
 
         //------- Sorteio das citações -------
         let citacaoCulturaSorteada = cultura.randomElement()!
@@ -336,14 +384,10 @@ struct Generate: ParsableCommand {
         }
     }
 }
-
 //-------- Início consulta de Themes ------
 struct Themes: ParsableCommand {
-    static var configuration = CommandConfiguration(
-        discussion: "\nShows the full list of subjects" )
-
+    static var configuration = CommandConfiguration(discussion: "\nShows the full list of subjects")
     var themes = ["Maracatu", "Cultura", "Música"]
-
     mutating func run() throws {
         Persistence.projectName = "Batuque"
         print("\n-----> Lista de temas <-----\n")
