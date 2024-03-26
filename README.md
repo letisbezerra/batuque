@@ -1,3 +1,7 @@
+
+<img width="857" alt="batuque" src="https://github.com/letisbezerra/batuque/assets/88676508/737d97ab-e300-49b4-9126-37e7116130ac">
+
+
 # Batuque
 
 This tool is designed to generate lists of batuqueiros for Maracatu's performances, taking into account the proportion and priority of instruments based on a database of batuqueiros, also generating inspiring quotes according to the chosen theme. By entering the quantity of batuqueiros, it generates a list and adds different quotes within the availability of themes. It's possible to create, read, update and delete the registered batuqueiros. You can also consult the available themes.
