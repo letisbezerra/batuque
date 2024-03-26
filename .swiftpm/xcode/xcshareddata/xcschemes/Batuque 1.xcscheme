@@ -51,47 +51,31 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "help"
+            argument = "read --verbose"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "delete --help"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "create &quot;Jeremias Mendes&quot; &quot;ferro&quot; -v"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "quote -h"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "quote generate --subject  cultura"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "recruit -l 32"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "read"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "update 65 &quot;Frederico Martins&quot; &quot;ferroo&quot;"
+            argument = "quote themes"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "update --help"
+            argument = "recruit -l 20 -v"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "delete 66"
+            argument = "update 61 &quot;Maria Santos&quot; &quot;caixa&quot;"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "create --help"
+            argument = "create &quot;Narcio de S&#xe1;&quot; &quot;caixa&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "delete 62"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "quote generate --subject maracatu"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
