@@ -14,7 +14,7 @@ This tool is designed to generate lists of batuqueiros for Maracatu's performanc
 batuque help
 ```
 ### Recruit
-- Defines the number of batuqueiros between 10 and 50 and create a propotional list considering the instruments priority
+- Defines the number of batuqueiros between 10 and 50 and create a propotional list considering the instrument's priority
 ```bash
 batuque recruit -l <number of batuqueiros you need>
 ```
