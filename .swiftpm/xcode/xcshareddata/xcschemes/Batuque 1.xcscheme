@@ -59,7 +59,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "create &quot;George Menezes&quot; &quot;alfaia&quot; -v"
+            argument = "create &quot;Jeremias Mendes&quot; &quot;ferro&quot; -v"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -76,11 +76,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "read"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "update 65 &quot;Frederico Martins&quot; &quot;ferroo&quot;"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "update --help"
