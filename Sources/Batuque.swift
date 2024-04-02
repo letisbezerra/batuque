@@ -67,6 +67,11 @@ struct Batuque: ParsableCommand {
 struct Recruit: ParsableCommand {
     @Option(name: .shortAndLong, help: "Defines the number of batuqueiros between 10 and 50 and create a propotional list considering the instruments priority.")
     var length: Int
+
+    static var configuration = CommandConfiguration(
+        abstract: "Defines the number of batuqueiros between 10 and 50"
+    )
+
     @OptionGroup var options: Batuque.Options
 
     func addBat(batuqueiros: [Batuqueiro], instrumento: String, listaBat: inout [Batuqueiro]) {
@@ -187,7 +192,10 @@ struct Recruit: ParsableCommand {
 // ----- Início função create --------
 struct Create: ParsableCommand {
     @OptionGroup var options: Batuque.Options
-    
+    static var configuration = CommandConfiguration(
+        abstract: "Creates a new batuqueiro in the list"
+    )
+
     //  ------ Cria os parâmentros do Create -------
     @Argument(help: "Batuqueiro's name and last name in quotes. Ex.: \"Maria da Silva\"")
     var nome: String
@@ -240,7 +248,7 @@ struct Create: ParsableCommand {
 
 // ------- Início função Read -----
 struct Read: ParsableCommand {
-    static var configuration = CommandConfiguration(discussion: "\nShows the full list of batuqueiros")
+    static var configuration = CommandConfiguration(abstract: "Prints the list of batuqueiros", discussion: "\nShows the full list of batuqueiros")
     @OptionGroup var options: Batuque.Options
 
     func run() throws {
@@ -266,6 +274,10 @@ struct Update: ParsableCommand {
 
     @Argument(help: "Batuqueiro's new instrument")
     var instrumento: String
+
+    static var configuration = CommandConfiguration(
+        abstract: "Updates a batuqueiro data in the list"
+    )
 
     func run() throws {
         setup()
@@ -317,7 +329,10 @@ struct Update: ParsableCommand {
 struct Delete: ParsableCommand {
     @Argument(help: "Batuqueiro's position in the list")
     var posicao: Int
-    
+    static var configuration = CommandConfiguration(
+        abstract: "Deletes batuqueiro's data in the list"
+    )
+
     @OptionGroup var options: Batuque.Options
 
     func run() throws {
@@ -348,6 +363,7 @@ struct Delete: ParsableCommand {
 
 struct Quote: ParsableCommand {
     static var configuration = CommandConfiguration(
+        abstract: "Generates a quote according to a theme",
         subcommands: [Generate.self, Themes.self],
         defaultSubcommand: Generate.self
     )
@@ -360,7 +376,7 @@ struct Generate: ParsableCommand {
         case musica
     }
 
-    @Option(name: .shortAndLong, help: "Allows to define the subject of a quote.")
+    @Option(name: .shortAndLong, help: "Allows to define the theme of a quote.")
     var subject: Subject
 
     @OptionGroup var options: Batuque.Options
@@ -397,7 +413,7 @@ struct Generate: ParsableCommand {
 }
 //-------- Início consulta de Themes ------
 struct Themes: ParsableCommand {
-    static var configuration = CommandConfiguration(discussion: "\nShows the full list of subjects")
+    static var configuration = CommandConfiguration(abstract: "Prints the registered list of themes", discussion: "\nShows the full list of themes")
     var themes = ["Maracatu", "Cultura", "Música"]
     mutating func run() throws {
         setup()

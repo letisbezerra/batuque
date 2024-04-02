@@ -55,8 +55,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "quote themes"
+            argument = "create -h"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "batuque --help"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "quote themes"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "recruit -l 20 -v"
