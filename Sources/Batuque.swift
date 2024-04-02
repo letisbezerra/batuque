@@ -6,6 +6,7 @@
 
 import Foundation
 import ArgumentParser
+import Rainbow
 
 //--------- Função de Setup ---------
 func setup() {
@@ -54,7 +55,7 @@ struct Batuque: ParsableCommand {
         different quotes within the availability of themes.
         It's possible to create, read, update and delete the registered
         batuqueiros. You can also consult the available themes.
-        """,
+        """.yellow,
         subcommands: [Recruit.self, Create.self, Read.self, Update.self, Delete.self, Quote.self, Themes.self]
     )
 
@@ -92,7 +93,7 @@ struct Recruit: ParsableCommand {
     mutating func run() throws {
         setup()
         guard (10...50).contains(length) else {
-            print("---> Por favor, insira um número entre 10 e 50 <---")
+            print("---> Por favor, insira um número entre 10 e 50 <---".red)
             throw CleanExit.helpRequest(self)
         }
 
@@ -159,8 +160,8 @@ struct Recruit: ParsableCommand {
         let qntAgogo: Int = instruments[6].quantidade
         let qntXequere: Int = instruments[7].quantidade
 
-        print("\n-> Proporção de instrumentos: \(qntAlfaias) alfaia(s), \(qntGongue) gonguê(s), \(qntAgbe) agbê(s), \(qntCaixa) caixa(s), \(qntFerro) ferro(s), \(qntBumbo) bumbo(s), \(qntAgogo) agogô(s), \(qntXequere) xequerê(s)\n")
-        verbosePrint(verbose: options.verbose, "-> Gerando lista...")
+        print("\n-> Proporção de instrumentos: \(qntAlfaias) alfaia(s), \(qntGongue) gonguê(s), \(qntAgbe) agbê(s), \(qntCaixa) caixa(s), \(qntFerro) ferro(s), \(qntBumbo) bumbo(s), \(qntAgogo) agogô(s), \(qntXequere) xequerê(s)\n".magenta)
+        verbosePrint(verbose: options.verbose, "-> Gerando lista...".green)
         sleep(1)
 
         batuqueirosSorteados.append(regenteSorteado)
@@ -179,11 +180,11 @@ struct Recruit: ParsableCommand {
         
         let maracatu: [String] = (try? Persistence.readPlainText(path: "maracatu.txt")) ?? []
         let citacaoMaracatuSorteada = maracatu.randomElement()!
-        print("\n 💭 Frase inspiração: \(citacaoMaracatuSorteada)\n")
+        print("\n 💭 Frase inspiração: \(citacaoMaracatuSorteada)\n".blue.italic)
         sleep(1)
 
         //----- Print lista ------
-        print("----> Lista de batuqueiros <----\n")
+        print("----> Lista de batuqueiros <----\n".yellow.bold)
         for batuqueiro in batuqueirosSorteados {
             print("\(batuqueiro.nome) | \(batuqueiro.instrumento)")
         }
@@ -227,7 +228,7 @@ struct Create: ParsableCommand {
             prioridade = 8
             
         default:
-            print("---> Please insert a valid instrument <---")
+            print("---> Please insert a valid instrument <---".red)
             throw CleanExit.helpRequest(self)
         }
         
@@ -242,7 +243,7 @@ struct Create: ParsableCommand {
 
         //      ----- Salva o novo registro no JSON ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("\n---> Registro de \(nome) criado com sucesso.\n")
+        print("\n---> Registro de \(nome) criado com sucesso.\n".green)
     }
 }
 
@@ -255,7 +256,7 @@ struct Read: ParsableCommand {
         setup()
         let model: Model = try Persistence.readJson(file: "batuqueiros.json")
         verbosePrint(verbose: options.verbose, "\n---> Gerando lista de batuqueiros...")
-        print("\n---> Lista completa de batuqueiros <---\n")
+        print("\n---> Lista completa de batuqueiros <---\n".green.bold)
         sleep(2)
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
@@ -311,7 +312,7 @@ struct Update: ParsableCommand {
                 prioridade = 8
 
             default:
-                print("---> Por favor, insira um instrumento válido <---")
+                print("---> Por favor, insira um instrumento válido <---".red)
                 throw CleanExit.helpRequest(self)
         }
             batuqueiro.instrumento = instrumento
@@ -321,7 +322,7 @@ struct Update: ParsableCommand {
         model.batuqueiros.insert(batuqueiro, at: posicao)
 
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("\n---> Os dados do batuqueiro foram atualizados na posição \(posicao)\n")
+        print("\n---> Os dados do batuqueiro foram atualizados na posição \(posicao)\n".green)
 
         for(index, bat) in model.batuqueiros.enumerated() {
             let displayIndex = index + 1
@@ -349,7 +350,7 @@ struct Delete: ParsableCommand {
 
         //------ Salva a alteração na lista ------
         try Persistence.saveJson(model, file: "batuqueiros.json")
-        print("\n---> ❌ Registro do batuqueiro na posição \(posicao) foi removido\n")
+        print("\n---> ❌ Registro do batuqueiro na posição \(posicao) foi removido\n".red)
         verbosePrint(verbose: options.verbose, "\n---> Gerando lista de batuqueiros atualizada...\n")
         sleep(2)
 
@@ -375,14 +376,14 @@ struct Quote: ParsableCommand {
 }
 
 struct Generate: ParsableCommand {
-    enum Subject: String, ExpressibleByArgument, CaseIterable {
+    enum Theme: String, ExpressibleByArgument, CaseIterable {
         case cultura
         case maracatu
         case musica
     }
 
     @Option(name: .shortAndLong, help: "Allows to define the theme of a quote.")
-    var subject: Subject
+    var theme: Theme
 
     @OptionGroup var options: Batuque.Options
 
@@ -403,16 +404,16 @@ struct Generate: ParsableCommand {
         let citacaoMusicaSorteada = musica.randomElement()!
 
         //------- Exibição das citações ------
-        switch subject {
+        switch theme {
         case .cultura:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre cultura...\n")
-            print("\n ---> 💭 Frase inspiração: \(citacaoCulturaSorteada)\n")
+            print("\n ---> 💭 Frase inspiração: \(citacaoCulturaSorteada)\n".blue.italic)
         case .maracatu:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre maracatu...\n")
-            print("\n ---> 💭 Frase inspiração: \(citacaoMaracatuSorteada)\n")
+            print("\n ---> 💭 Frase inspiração: \(citacaoMaracatuSorteada)\n".blue.italic)
         case .musica:
             verbosePrint(verbose: options.verbose, "Escolhendo uma frase inspiração sobre música...\n")
-            print("\n ---> 💭 Frase inspiração: \(citacaoMusicaSorteada)\n")
+            print("\n ---> 💭 Frase inspiração: \(citacaoMusicaSorteada)\n".blue.italic)
         }
     }
 }
@@ -422,9 +423,9 @@ struct Themes: ParsableCommand {
     var themes = ["Maracatu", "Cultura", "Música"]
     mutating func run() throws {
         setup()
-        print("\n-----> Lista de temas <-----\n")
+        print("\n-----> Lista de temas <-----\n".yellow.bold)
         for theme in themes {
-            print("★ \(theme)\n")
+            print("★ \(theme)\n".italic)
         }
     }
 }

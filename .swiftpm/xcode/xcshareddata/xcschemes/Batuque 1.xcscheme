@@ -71,12 +71,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "recruit -l 20 -v"
-            isEnabled = "NO">
+            argument = "recruit -l 80"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "update 6 -n &quot;Vanessa Lopes&quot;"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "help"
