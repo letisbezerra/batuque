@@ -31,7 +31,15 @@ batuque read
 ### Update
 - Updates a batuqueiro data in the list
 ```bash
-batuque update <batuqueiro's position in the list> | -n, --nome "new name" | -i, --instrumento "new instrument"
+batuque update <batuqueiro's position in the list>  -n --nome "new name" -i --instrumento "new instrument"
+```
+- Updates only batuqueiro's name
+```bash
+batuque update <batuqueiro's position in the list>  -n --nome "new name"
+```
+- Updates only batuqueiro's instrument
+```bash
+batuque update <batuqueiro's position in the list>  -i --instrumento "new instrument"
 ```
 ### Delete
 - Deletes batuqueiro's data in the list 
@@ -39,12 +47,12 @@ batuque update <batuqueiro's position in the list> | -n, --nome "new name" | -i,
 batuque delete <batuqueiro's position in the list>
 ```
 ### Quote
-- Generates a quote according to a subject
+- Generates a quote according to a theme
 ```bash
-batuque quote generate -s <subject>
+batuque quote generate -t --theme <theme>
 ```
 ### Themes
-- Prints the registered list of subjects
+- Prints the registered list of themes
 ```bash
 batuque quote themes
 ```
