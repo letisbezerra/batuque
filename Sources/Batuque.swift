@@ -269,11 +269,11 @@ struct Update: ParsableCommand {
     @Argument(help: "Batuqueiro's position in the list")
     var posicao: Int
 
-    @Argument(help: "Batuqueiro's new name")
-    var nome: String
+    @Option(name: .shortAndLong, help: "Batuqueiro's new name")
+    var nome: String?
 
-    @Argument(help: "Batuqueiro's new instrument")
-    var instrumento: String
+    @Option(name: .shortAndLong, help: "Batuqueiro's new instrument")
+    var instrumento: String?
 
     static var configuration = CommandConfiguration(
         abstract: "Updates a batuqueiro data in the list"
@@ -281,38 +281,43 @@ struct Update: ParsableCommand {
 
     func run() throws {
         setup()
-        var prioridade: Int = 0
-        switch instrumento {
-        case "regente":
-            prioridade = 0
-        case "alfaia":
-            prioridade = 1
-        case "gonguê":
-            prioridade = 2
-        case "agbê":
-            prioridade = 3
-        case "caixa":
-            prioridade = 4
-        case "ferro":
-            prioridade = 5
-        case "bumbo":
-            prioridade = 6
-        case "agogô":
-            prioridade = 7
-        case "xequerê":
-            prioridade = 8
-            
-        default:
-            print("---> Por favor, insira um instrumento válido <---")
-            throw CleanExit.helpRequest(self)
-        }
 
         //----- Cria (update) novo batuqueiro -----
-        let batuqueiro = Batuqueiro(nome: nome, instrumento: instrumento, prioridade: prioridade)
+        var model: Model = try Persistence.readJson(file: "batuqueiros.json")
+        var batuqueiro = model.batuqueiros[posicao]
+        if let nome {
+            batuqueiro.nome = nome
+        }
+        if let instrumento {
+            var prioridade: Int = 0
+            switch instrumento {
+            case "regente":
+                prioridade = 0
+            case "alfaia":
+                prioridade = 1
+            case "gonguê":
+                prioridade = 2
+            case "agbê":
+                prioridade = 3
+            case "caixa":
+                prioridade = 4
+            case "ferro":
+                prioridade = 5
+            case "bumbo":
+                prioridade = 6
+            case "agogô":
+                prioridade = 7
+            case "xequerê":
+                prioridade = 8
 
-        var model: Model = try Persistence.readJson(file: "Batuqueiros.json")
+            default:
+                print("---> Por favor, insira um instrumento válido <---")
+                throw CleanExit.helpRequest(self)
+        }
+            batuqueiro.instrumento = instrumento
+            batuqueiro.prioridade = prioridade
+        }
         model.batuqueiros.remove(at: posicao)
-
         model.batuqueiros.insert(batuqueiro, at: posicao)
 
         try Persistence.saveJson(model, file: "batuqueiros.json")

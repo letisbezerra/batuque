@@ -55,12 +55,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "read"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "create -h"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "batuque --help"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "quote themes"
@@ -71,7 +75,15 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "update 61 &quot;Maria Santos&quot; &quot;caixa&quot;"
+            argument = "update 6 -n &quot;Vanessa Lopes&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "help"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "update -h"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument

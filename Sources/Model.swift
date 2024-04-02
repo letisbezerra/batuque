@@ -88,7 +88,7 @@ struct Model: Codable {
 }
 
 struct Batuqueiro: Codable {
-    let nome: String
-    let instrumento: String
-    let prioridade: Int
+    var nome: String
+    var instrumento: String
+    var prioridade: Int
 }

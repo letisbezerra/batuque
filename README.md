@@ -31,7 +31,7 @@ batuque read
 ### Update
 - Updates a batuqueiro data in the list
 ```bash
-batuque update <batuqueiro's position in the list> "<batuqueiro's new name>" "<batuqueiro's new instrument>"
+batuque update <batuqueiro's position in the list> | -n, --nome "new name" | -i, --instrumento "new instrument"
 ```
 ### Delete
 - Deletes batuqueiro's data in the list 
